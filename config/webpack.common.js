@@ -79,11 +79,6 @@ module.exports = {
         new webpack.optimize.CommonsChunkPlugin({
             name: 'manifest'
         }),
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            'window.jQuery': 'jquery'
-        }),
         new HtmlWebpackPlugin({
             chunksSortMode: 'dependency',
             template: './client/index.html',

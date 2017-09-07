@@ -1,0 +1,39 @@
+#cache:
+#  untracked: true
+#  key: "$CI_BUILD_REF_NAME"
+#  paths:
+#    - node_modules/
+#
+#before_script:
+#  - VERSION=`npm run packageVersion | awk 'END{print}'`
+#  - echo "name = ${CI_PROJECT_NAME}, version = ${VERSION}"
+#
+#stages:
+#  - build_app
+#  - build_image_dev
+#  - build_image_master
+#
+#build-app:
+#  stage: build_app
+#  script:
+#    - npm install
+#    - npm run build
+#  only:
+#    - master
+#    - development
+#
+#build-image-dev:
+#  stage: build_image_dev
+#  script:
+#    - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/$CI_PROJECT_NAME:$VERSION-SNAPSHOT
+#    - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/$CI_PROJECT_NAME:$VERSION-SNAPSHOT
+#  only:
+#    - development
+#
+#build-image-master:
+#  stage: build_image_master
+#  script:
+#    - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/$CI_PROJECT_NAME:$VERSION
+#    - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/$CI_PROJECT_NAME:$VERSION
+#  only:
+#    - master

@@ -46,5 +46,5 @@ if(cluster.isMaster && config.cluster){
     });
 }else{
     http.createServer(app.callback()).listen(config.port);
-    log.info(config.pkg.name + " is listening on http://" + config.ip + ":" + config.port + (/^\/$/.test(config.cdn)?config.cdn:config.cdn+'/'));
+    log.info(config.pkg.name + " is listening on http://" + config.ip + ":" + config.port);
 }

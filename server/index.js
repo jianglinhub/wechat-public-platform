@@ -97,16 +97,16 @@ app.use(bodyParser());
 
 app.use(router.routes());
 
-app.use(jwt({
-    algorithm: 'RS256',
-    secret: jwtUtil.getPublicKey(),
-    getToken: ctx => {
-        let token = ctx.session.token || ctx.query.token;
-        return token;
-    }
-}).unless({
-    path: []
-}));
+// app.use(jwt({
+//     algorithm: 'RS256',
+//     secret: jwtUtil.getPublicKey(),
+//     getToken: ctx => {
+//         let token = ctx.session.token || ctx.query.token;
+//         return token;
+//     }
+// }).unless({
+//     path: []
+// }));
 
 app.use(trouters());
 

@@ -4,7 +4,7 @@
   "description": "Unified presentation layer framework!",
   "main": "server/server.js",
   "scripts": {
-    "start": "webpack-dev-server --inline --progress --port 8010",
+    "start": "webpack-dev-server --inline --progress --port 8000",
     "test": "karma start",
     "build": "webpack --config config/webpack.prod.js --progress --profile --bail",
     "packageVersion": "echo $npm_package_version"
@@ -44,7 +44,8 @@
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "underscore": "^1.8.3",
-    "koa-compress": "^2.0.0"
+    "koa-compress": "^2.0.0",
+    "wangeditor": "^2.1.23"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

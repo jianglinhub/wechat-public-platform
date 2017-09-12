@@ -53,9 +53,7 @@ trouter.get("/articles", async function (ctx, next) {
     let pageIndex = parseInt(reqData.pageIndex);
     let pageSize = parseInt(reqData.pageSize);
     let query = {
-        title:reqData.title,
-        startTime:reqData.startTime,
-        endTime:reqData.endTime
+        title:reqData.title
     };
     let result = await handler.findArticlesByParamsAndPageHasFuzzy(query, {
         pageIndex: pageIndex,

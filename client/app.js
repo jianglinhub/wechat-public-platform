@@ -4,10 +4,14 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Resource from 'vue-resource';
+import iView from 'iview';
+import 'iview/dist/styles/iview.css';
 
 Vue.use(VueRouter);
 
 Vue.use(Resource);
+
+Vue.use(iView);
 
 import store from './modules/store';
 import filters from "./modules/common/filter.js";

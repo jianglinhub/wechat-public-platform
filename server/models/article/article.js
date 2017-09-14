@@ -15,8 +15,11 @@ class Article{
             title: String,
             create_time: String,
             update_time:String,
-            source: String,
+            author: String,
             content: String,
+            digest: String,
+            source_url: String,
+            poster_url: String,
             create_admin: {
                 type: Schema.Types.ObjectId,
                 ref: "admin"

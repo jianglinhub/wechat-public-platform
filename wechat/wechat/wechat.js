@@ -11,6 +11,7 @@ var request = require('request-promise')
 var util = require('./util')
 var fs = require('fs')
 var _ = require('lodash')
+var config = require('../../server/config');
 
 var prefix = 'https://api.weixin.qq.com/cgi-bin/'
 
@@ -30,7 +31,6 @@ var api = {
     count: prefix + 'material/get_materialcount?',
     batch: prefix + 'material/batchget_material?'
   }
-
 }
 
 // 票据
@@ -407,6 +407,41 @@ Wechat.prototype.batchMaterial = function(options) {
           })
 
       })
+  })
+}
+
+Wechat.prototype.queryArticlesByKeyword = function(keyword) {
+  
+  var that = this
+
+  var params = {
+    pageSize: 8,
+    pageIndex: 1,
+    title: encodeURIComponent(keyword)
+  }
+
+  return new Promise(function(resolve, reject) {
+      var url = 'http://' + config.ip + ':' + config.port + '/api/articles?title=' + params.title + '&pageSize=' + params.pageSize + '&pageIndex=' + params.pageIndex
+
+      var options = {
+        method: 'GET',
+        url: url,
+        json: true
+      }
+
+      request(options)
+        .then(function(response) {
+          var _data = response
+      
+          if (_data) {
+            resolve(_data)
+          } else {
+            throw new Error('Fetch Articles failed')
+          }
+
+        }).catch(function(err) {
+          reject(err)
+        })
   })
 }
 

@@ -24,12 +24,6 @@ const assert      = require('assert');
 const webRoot     = path.join(process.cwd(), "webapp");
 const nodeEnv     = process.env.NODE_ENV || 'development';
 
-// 微信模块接入
-const wechat = require('../wechat/wechat/g')
-const wx_config = require('../wechat/config')
-const weixin = require('../wechat/weixin')
-app.use(wechat(wx_config.wechat, weixin.reply))
-
 app.use(async (ctx, next) => {
     try {
         let pattern = new RegExp("^/api");
@@ -47,7 +41,6 @@ app.use(async (ctx, next) => {
         }
     }
 });
-
 
 app.use(compress({
     filter: function (content_type) {
@@ -98,11 +91,15 @@ app.use(session({
     }
 }));
 
-app.use(Proxy.proxy());
-
 app.use(bodyParser());
 
 app.use(router.routes());
+
+// 微信模块接入
+const wechat = require('../wechat/wechat/g')
+const wx_config = require('../wechat/config')
+const weixin = require('../wechat/weixin')
+app.use(wechat(wx_config.wechat, weixin.reply))
 
 // app.use(jwt({
 //     algorithm: 'RS256',
@@ -116,5 +113,7 @@ app.use(router.routes());
 // }));
 
 app.use(trouters());
+
+
 
 module.exports = app;

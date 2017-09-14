@@ -12,10 +12,13 @@ trouter.post("/articles", async function (ctx, next) {
     let time =new Date().getTime();
     let param = {
         title: reqData.title,
-        source: reqData.source,
+        author: reqData.author,
         content: reqData.content,
         create_time : time,
         update_time : time,
+        digest: reqData.digest,
+        source_url: reqData.source_url,
+        poster_url: reqData.poster_url,
         create_admin : ctx.session.id
     };
     await handler.saveArticle(param);
@@ -29,8 +32,11 @@ trouter.put("/articles", async function (ctx, next) {
     let reqData = ctx.request.body;
     let param = {
         title: reqData.title,
-        source: reqData.source,
+        author: reqData.author,
         content: reqData.content,
+        digest: reqData.digest,
+        source_url: reqData.source_url,
+        poster_url: reqData.poster_url,
         update_time : new Date().getTime()
     };
     await handler.updateArticleById(ctx.query.id, param);

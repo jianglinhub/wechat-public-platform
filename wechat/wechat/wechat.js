@@ -408,6 +408,8 @@ Wechat.prototype.batchMaterial = function(options) {
 
       })
   })
+
+  
 }
 
 Wechat.prototype.queryArticlesByKeyword = function(keyword) {

@@ -14,7 +14,6 @@ const mount       = require('koa-mount');
 const staticCache = require('koa-static-cache');
 const compress    = require('koa-compress');
 const trouters    = require('./middleware/routers');
-const Proxy       = require('./middleware/proxy');
 const router      = require('./controllers/signin/router');
 const config      = require('./config');
 const jwtUtil     = require('./util/jwtUtil');

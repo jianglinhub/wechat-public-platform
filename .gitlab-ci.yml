@@ -12,6 +12,7 @@ stages:
  - build_app
  - build_image_dev
  - build_image_master
+ - build_image_1.1.0
  - deploy
 
 build-app:
@@ -22,12 +23,13 @@ build-app:
  only:
    - master
    - development
+   - 1.1.0
 
 build-image-dev:
  stage: build_image_dev
  script:
-   - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-SNAPSHOT
-   - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-SNAPSHOT
+   - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-DEVELOPMENT
+   - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-DEVELOPMENT
  only:
    - development
 
@@ -38,6 +40,14 @@ build-image-master:
    - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION
  only:
    - master
+
+build-image-dev:
+ stage: build_image_1.1.0
+ script:
+   - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-SNAPSHOT
+   - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-SNAPSHOT
+ only:
+   - 1.1.0
 
 deploy_to_server:
  stage: deploy

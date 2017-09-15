@@ -11,7 +11,7 @@ var wechatApi = new Wechat(config.wechat)
 exports.reply = async function (ctx, next) {
   var message = ctx.weixin
 
-  var reply = ''
+  var reply = '额，没有找到“' + message.Content + '”相关内容，换个关键字试试？'
 
   if (message.MsgType === 'event') {
 
@@ -32,9 +32,7 @@ exports.reply = async function (ctx, next) {
     // 查询关键字
     var articles = await wechatApi.queryArticlesByKeyword(content)
 
-    if (!articles.datas || articles.datas.length === 0) {
-      reply = '额，没有找到“' + message.Content + '”相关内容，换个关键字试试？'
-    } else {
+    if (articles.datas && articles.datas.length !== 0) {
 
       articles = articles.datas.slice(0, 10)
 
@@ -54,6 +52,31 @@ exports.reply = async function (ctx, next) {
 
     }
 
+  } else if (message.MsgType === 'voice') {
+    var voiceText = message.Recognition
+
+    // 查询关键字
+    var articles = await wechatApi.queryArticlesByKeyword(content)
+    
+    if (articles.datas && articles.datas.length !== 0) {
+
+      articles = articles.datas.slice(0, 10)
+
+      console.log(articles)
+
+      var news = []
+      articles.forEach(function(article) {
+        news.push({
+          title: article.title,
+          description: article.digest,
+          picUrl: article.poster_url,
+          url: article.source_url
+        })
+      })
+
+      reply = news
+
+    }
   }
 
   ctx.reply = reply

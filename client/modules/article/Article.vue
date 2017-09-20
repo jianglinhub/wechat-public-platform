@@ -2,9 +2,9 @@
     <div>
         <Form :label-width="70" inline style="margin: 20px 20px 0 0">
             <FormItem label="标题">
-                <Input v-model="articleSearch.title" placeholder="请输入"></Input>
+                <Input v-model="articleSearch.title" placeholder="请输入关键字"></Input>
             </FormItem>
-            <Button type="primary" @click="getArticle()">搜索</Button>
+            <Button type="primary" @click="getArticle()">查询</Button>
             <Button type="warning" @click="massModalShow = true" style="float:right;margin-left:12px;">群发</Button>
             <Button type="primary" @click="articleModule('add');modalTitle = '新增';" style="float:right">新增</Button>
         </Form>

@@ -52,7 +52,7 @@ build-image-dev:
 deploy_to_server:
  stage: deploy
  script:
-   - image=registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION
+   - image=registry.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION
    - commands='if [ -n "$(docker ps -a | grep wechat)" ]; then docker rm -f wechat; fi && docker login --username=$(curl -s http://172.16.1.83:8002/docker/registry/username) --password=$(curl -s http://172.16.1.83:8002/docker/registry/password) registry.cn-hangzhou.aliyuncs.com && docker run --name wechat -p 80:80 --link mongodb:mongodb -d '$image
    - echo $commands | ssh root@172.16.1.78
  when: manual

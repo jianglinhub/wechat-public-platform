@@ -53,16 +53,18 @@ exports.reply = async function (ctx, next) {
     }
 
   } else if (message.MsgType === 'voice') {
-    var voiceText = message.Recognition
+
+    var voiceText = message.Recognition.split('。')[0]
 
     // 查询关键字
-    var articles = await wechatApi.queryArticlesByKeyword(content)
+    var articles = await wechatApi.queryArticlesByKeyword(voiceText)
+
+    console.log('voiceText:====>', voiceText)
+    console.log('articles:=====>', articles)
     
     if (articles.datas && articles.datas.length !== 0) {
 
       articles = articles.datas.slice(0, 10)
-
-      console.log(articles)
 
       var news = []
       articles.forEach(function(article) {
@@ -73,9 +75,9 @@ exports.reply = async function (ctx, next) {
           url: article.source_url
         })
       })
-
       reply = news
-      console.log('reply:=====>', reply)
+    } else {
+      reply = '额，没有找到“' + voiceText + '”相关内容，换个关键字试试？'
     }
   }
 

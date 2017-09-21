@@ -14,7 +14,6 @@ const mount       = require('koa-mount');
 const staticCache = require('koa-static-cache');
 const compress    = require('koa-compress');
 const trouters    = require('./middleware/routers');
-const Proxy       = require('./middleware/proxy');
 const router      = require('./controllers/signin/router');
 const config      = require('./config');
 const jwtUtil     = require('./util/jwtUtil');
@@ -29,7 +28,7 @@ app.use(async (ctx, next) => {
         let pattern = new RegExp("^/api");
         if(pattern.test(ctx.url)){
             log.info("{method: " + ctx.method + ", url: " + ctx.url + "}");
-        }
+        } 
         await next();
     } catch (err) {
         log.info('--------------authorization------------->%s', err.message);
@@ -91,23 +90,29 @@ app.use(session({
     }
 }));
 
-app.use(Proxy.proxy());
-
 app.use(bodyParser());
 
 app.use(router.routes());
 
-app.use(jwt({
-    algorithm: 'RS256',
-    secret: jwtUtil.getPublicKey(),
-    getToken: ctx => {
-        let token = ctx.session.token || ctx.query.token;
-        return token;
-    }
-}).unless({
-    path: []
-}));
+// 微信模块接入
+const wechat = require('../wechat/wechat/g')
+const wx_config = require('../wechat/config')
+const weixin = require('../wechat/weixin')
+app.use(wechat(wx_config.wechat, weixin.reply))
+
+// app.use(jwt({
+//     algorithm: 'RS256',
+//     secret: jwtUtil.getPublicKey(),
+//     getToken: ctx => {
+//         let token = ctx.session.token || ctx.query.token;
+//         return token;
+//     }
+// }).unless({
+//     path: []
+// }));
 
 app.use(trouters());
+
+
 
 module.exports = app;

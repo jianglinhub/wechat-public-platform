@@ -1,39 +1,60 @@
-#cache:
-#  untracked: true
-#  key: "$CI_BUILD_REF_NAME"
-#  paths:
-#    - node_modules/
-#
-#before_script:
-#  - VERSION=`npm run packageVersion | awk 'END{print}'`
-#  - echo "name = ${CI_PROJECT_NAME}, version = ${VERSION}"
-#
-#stages:
-#  - build_app
-#  - build_image_dev
-#  - build_image_master
-#
-#build-app:
-#  stage: build_app
-#  script:
-#    - npm install
-#    - npm run build
-#  only:
-#    - master
-#    - development
-#
-#build-image-dev:
-#  stage: build_image_dev
-#  script:
-#    - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/$CI_PROJECT_NAME:$VERSION-SNAPSHOT
-#    - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/$CI_PROJECT_NAME:$VERSION-SNAPSHOT
-#  only:
-#    - development
-#
-#build-image-master:
-#  stage: build_image_master
-#  script:
-#    - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/$CI_PROJECT_NAME:$VERSION
-#    - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/$CI_PROJECT_NAME:$VERSION
-#  only:
-#    - master
+cache:
+ untracked: true
+ key: "$CI_BUILD_REF_NAME"
+ paths:
+   - node_modules/
+
+before_script:
+ - VERSION=`npm run packageVersion | awk 'END{print}'`
+ - echo "name = ${CI_PROJECT_NAME}, version = ${VERSION}"
+
+stages:
+ - build_app
+ - build_image_dev
+ - build_image_master
+ - build_image_1.1.0
+ - deploy
+
+build-app:
+ stage: build_app
+ script:
+   - npm install
+   - npm run build
+ only:
+   - master
+   - development
+   - 1.1.0
+
+build-image-dev:
+ stage: build_image_dev
+ script:
+   - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-DEVELOPMENT
+   - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-DEVELOPMENT
+ only:
+   - development
+
+build-image-master:
+ stage: build_image_master
+ script:
+   - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION
+   - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION
+ only:
+   - master
+
+build-image-dev:
+ stage: build_image_1.1.0
+ script:
+   - docker build . --tag registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-SNAPSHOT
+   - docker push registry-vpc.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-SNAPSHOT
+ only:
+   - 1.1.0
+
+deploy_to_server:
+ stage: deploy
+ script:
+   - image=registry.cn-hangzhou.aliyuncs.com/meiauto/ice:$CI_PROJECT_NAME-$VERSION-SNAPSHOT
+   - commands='if [ -n "$(docker ps -a | grep wechat)" ]; then docker rm -f wechat; fi && docker login --username=$(curl -s http://172.16.1.83:8002/docker/registry/username) --password=$(curl -s http://172.16.1.83:8002/docker/registry/password) registry.cn-hangzhou.aliyuncs.com && docker run --name wechat -p 80:80 --link mongodb:mongodb -d '$image
+   - echo $commands | ssh root@172.16.1.78
+ when: manual
+ only:
+   - 1.1.0

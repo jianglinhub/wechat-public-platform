@@ -22,11 +22,10 @@ module.exports = webpackMerge(commonConfig, {
 
     devServer: {
         host: "0.0.0.0",
-        historyApiFallback: true,
         stats: 'minimal',
         proxy: {
-            "/message": {
-                target: "http://127.0.0.1:3011/",
+            "/api": {
+                target: "http://127.0.0.1:3000/",
             }
         }
     }

@@ -13,13 +13,17 @@ class Article{
     get articleModel(){
         let articleSchema = Schema({
             title: String,
-            create_time: String, //唯一，不能重复
-            source: String,
-            content: String, //文章
-            adminRoles: [{
+            create_time: String,
+            update_time:String,
+            author: String,
+            content: String,
+            digest: String,
+            source_url: String,
+            poster_url: String,
+            create_admin: {
                 type: Schema.Types.ObjectId,
-                ref: "adminRole"
-            }]
+                ref: "admin"
+            }
         });
         return mongoose.model("article", articleSchema);
     }
